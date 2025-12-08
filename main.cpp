@@ -3,8 +3,7 @@
 #include <string.h>
 #include <fstream>
 #include "Grafo.h"
-#include "GrafoBFS.h"
-#include "GrafoDFS.h"
+
 #include "Vehiculos.h"
 
 using namespace std;
