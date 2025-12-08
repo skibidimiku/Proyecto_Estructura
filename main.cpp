@@ -4,8 +4,6 @@
 #include <fstream>
 #include "Grafo.h"
 #include "Vehiculos.h"
-#include "GrafoDFS.h"
-#include "GrafoBFS.h"
 
 using namespace std;
 
