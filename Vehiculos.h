@@ -79,7 +79,7 @@ class VehiculoClase{
             return total;
         }
 
-        void imprimirDebug() const{
+        /*void imprimirDebug() const{
             for(size_t i=0; i < capacidad; ++i){
                 cout << "Bucket " << i << ": ";
                 for(const auto& lb : Tabla[i]){
@@ -88,6 +88,24 @@ class VehiculoClase{
                 }
                 cout << "\n";
             }
+        }*/
+		void infoHash() const {
+        cout << "\n---- INFORMACION DE LA TABLA HASH ----\n";
+
+        cout << "Capacidad (numero de buckets): " << capacidad << "\n";
+        size_t total = totalVehiculo();
+        cout << "Total de vehiculos almacenados: " << total << "\n";
+
+        double loadFactor = (double)total / capacidad;
+        cout << fixed << setprecision(3);
+        cout << "Factor de carga: " << loadFactor << "\n";
+
+        cout << "\nDistribucion (vehiculos por bucket):\n";
+        for (size_t i = 0; i < capacidad; ++i) {
+            cout << "Bucket " << i << ": " << Tabla[i].size() << " vehiculos\n";
         }
+
+        cout << "----------------------------------------\n\n";
+    }
 
 };

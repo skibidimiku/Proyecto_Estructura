@@ -3,9 +3,9 @@
 #include <string.h>
 #include <fstream>
 #include "Grafo.h"
-#include "Vehiculos.h"
-#include "GrafoDFS.h"
 #include "GrafoBFS.h"
+#include "GrafoDFS.h"
+#include "Vehiculos.h"
 
 using namespace std;
 
@@ -13,7 +13,7 @@ using namespace std;
 //recipiente universal para un grafo de tamaño "4"
 int N=3;
 GrafoMatriz G(N, true);
-
+VehiculoClase tablaVehiculos(101);
 
 void leerArchivo() {
 
@@ -301,6 +301,70 @@ int EjecutarBFS() {
     return 0;
 }
 
+void AltaVeh() {
+    string id, tipo, placa, origen, destino, hora;
+
+    cout << "\n--- Alta de Vehiculo ---\n";
+
+    cout << "ID del vehiculo: ";
+    cin >> id;
+
+    cout << "Tipo: ";
+    cin >> tipo;
+
+    cout << "Placa: ";
+    cin >> placa;
+
+    cout << "Origen: ";
+    cin >> origen;
+
+    cout << "Destino: ";
+    cin >> destino;
+
+    cout << "Hora de entrada: ";
+    cin >> hora;
+
+    Vehiculo v(id, tipo, placa, origen, destino, hora);
+    tablaVehiculos.insertarVehiculo(v);
+
+    cout << "\nVehiculo registrado correctamente.\n";
+}
+
+void BajaVeh() {
+    string id;
+    cout << "\n--- Baja de VehIculo ---\n";
+    cout << "ID del vehiculo a eliminar: ";
+    cin >> id;
+
+    if (tablaVehiculos.eliminar(id))
+        cout << "Vehiculo eliminado correctamente.\n";
+    else
+        cout << "No se encontro el vehiculo.\n";
+}
+
+void BuscarVeh() {
+    string id;
+    cout << "\n--- Buscar Vehiculo ---\n";
+    cout << "Ingresa el ID del vehiculo: ";
+    cin >> id;
+
+    Vehiculo* v = tablaVehiculos.buscar(id);
+
+    if (v) {
+        cout << "\nVehiculo encontrado:\n";
+        cout << "ID: " << v->IdVehiculo << "\n";
+        cout << "Tipo: " << v->Tipo << "\n";
+        cout << "Placa: " << v->Placa << "\n";
+        cout << "Origen: " << v->Origen << "\n";
+        cout << "Destino: " << v->Destino << "\n";
+        cout << "Hora entrada: " << v->horaEntrada << "\n";
+    } else {
+        cout << "ID no encontrado\n";
+    }
+}
+
+
+
 
 
 int main(){
@@ -318,6 +382,10 @@ int main(){
         cout << "\n\t [7] Dijkstra.";
         cout << "\n\t [8] DFS (Depth First Search).";
         cout << "\n\t [9] BFS (Breadth First Search).";
+        cout << "\n\t [10] Alta Vehiculo.";
+		cout << "\n\t [11] Baja Vehiculo.";
+		cout << "\n\t [12] Buscar Vehiculo.";
+		cout << "\n\t [13] InfoHash.";
         cout << "\n\t [0] Salir";
         cout << "\n\n\t Elige una opcion: ";
         cin >> selec;
@@ -349,6 +417,18 @@ int main(){
 
             case 9: EjecutarBFS();
             break;
+            
+            case 10: AltaVeh(); 
+			break;
+			
+			case 11: BajaVeh(); 
+			break;
+			
+			case 12: BuscarVeh(); 
+			break;
+			
+			case 13: tablaVehiculos.infoHash();
+    		break;
 
             case 0: cout << "\n\t Saliendo del programa...\n";
                 break;
@@ -357,4 +437,4 @@ int main(){
         }
     }while(selec != 0);
     return 0;
-}
+}     
