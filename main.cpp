@@ -4,6 +4,8 @@
 #include <fstream>
 #include "Grafo.h"
 #include "Vehiculos.h"
+#include "GrafoDFS.h"
+#include "GrafoBFS.h"
 
 using namespace std;
 
@@ -235,6 +237,70 @@ int EjecutarDijkstra() {
     return 0;
 }
 
+int EjecutarDFS() {
+    int opcion;
+    cout << "\n[1] DFS desde todos los nodos (grafo completo)\n";
+    cout << "[2] DFS desde un nodo especifico\n";
+    cout << "Elige una opcion: ";
+    cin >> opcion;
+
+    GrafoDFS dfs(G);
+
+    if(opcion == 1) {
+        dfs.ejecutar();
+        dfs.imprimirResultados();
+    } else if(opcion == 2) {
+        int nodo;
+        cout << "Ingresa el nodo de inicio: ";
+        cin >> nodo;
+        
+        if(nodo >= (int)G.numVertices() || nodo < 0) {
+            cout << "Error: nodo no existe.\n";
+            return 1;
+        }
+        
+        dfs.ejecutarDesde(nodo);
+        dfs.imprimirResultados();
+    } else {
+        cout << "Opcion invalida.\n";
+        return 1;
+    }
+
+    return 0;
+}
+
+int EjecutarBFS() {
+    int opcion;
+    cout << "\n[1] BFS desde todos los componentes\n";
+    cout << "[2] BFS desde un nodo especifico\n";
+    cout << "Elige una opcion: ";
+    cin >> opcion;
+
+    GrafoBFS bfs(G);
+
+    if(opcion == 1) {
+        bfs.ejecutar();
+        bfs.imprimirResultados();
+    } else if(opcion == 2) {
+        int nodo;
+        cout << "Ingresa el nodo de inicio: ";
+        cin >> nodo;
+
+        if(nodo >= (int)G.numVertices() || nodo < 0) {
+            cout << "Error: nodo no existe.\n";
+            return 1;
+        }
+
+        bfs.bfsDesde(nodo);
+        bfs.imprimirResultados();
+    } else {
+        cout << "Opcion invalida.\n";
+        return 1;
+    }
+
+    return 0;
+}
+
 
 
 int main(){
@@ -250,6 +316,8 @@ int main(){
         cout << "\n\t [5] AltaNodo.";
         cout << "\n\t [6] BajaNodo.";
         cout << "\n\t [7] Dijkstra.";
+        cout << "\n\t [8] DFS (Depth First Search).";
+        cout << "\n\t [9] BFS (Breadth First Search).";
         cout << "\n\t [0] Salir";
         cout << "\n\n\t Elige una opcion: ";
         cin >> selec;
@@ -274,6 +342,12 @@ int main(){
             break;
 
             case 7: EjecutarDijkstra();
+            break;
+
+            case 8: EjecutarDFS();
+            break;
+
+            case 9: EjecutarBFS();
             break;
 
             case 0: cout << "\n\t Saliendo del programa...\n";
