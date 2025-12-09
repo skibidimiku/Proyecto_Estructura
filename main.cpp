@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <iostream>
 #include <string.h>
+#include <ctime>
 #include <fstream>
 #include <windows.h>
 #include "Grafo.h"
@@ -54,6 +55,8 @@ void leerArchivoVehi(){
 }
 
 void leerArchivo() {
+    time_t inicio, fin;
+    time(&inicio);
     int c=1;
 
     ifstream archivo("grafo.txt");
@@ -120,6 +123,9 @@ void leerArchivo() {
     cout << "\n";
 
     leerArchivoVehi();
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
 
 } //FIN DE LEER ARCHIVOS 
 
@@ -147,12 +153,15 @@ void CargarArchivo(){
 
     archivo.close();
     tablaVehiculos.guardarArchiv();
+
 }
 
 
 
 
 void AltaArista(){
+    time_t inicio, fin;
+    time(&inicio);
     int nVertices = G.numVertices();
     int a,b,p;
     int band = 1;
@@ -188,11 +197,17 @@ void AltaArista(){
     } 
     //toda la info que metio el usuario mas la matriz actualizada se mete en el archivo.
     CargarArchivo();
+
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
 }
 
 
 
 void BajaArista(){
+    time_t inicio, fin;
+    time(&inicio);
     int nVertices = G.numVertices();
     int a,b;
     int band = 1;
@@ -225,32 +240,42 @@ void BajaArista(){
     } 
     //toda la info que metio el usuario mas la matriz actualizada se mete en el archivo.
     CargarArchivo();
+
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
 }
 
 
 
 void AltaNodo(){
+    time_t inicio, fin;
+    time(&inicio);
     string nom;
     G.imprimir();
-        cout << "\n";
-        cout << "Dame el nombre del nodo: ";
-        cin>>nom;
+    cout << "\n";
+    cout << "Dame el nombre del nodo: ";
+    cin>>nom;
             
-            
-            
-            size_t nuevoTamano = G.numVertices() + 1;
-            G.redimensionar(nuevoTamano);
-            cout<<G.numVertices();
-            G.setNombre(G.numVertices()-1, nom);
+    size_t nuevoTamano = G.numVertices() + 1;
+    G.redimensionar(nuevoTamano);
+    cout<<G.numVertices();
+    G.setNombre(G.numVertices()-1, nom);
 
 
-            G.imprimir();
+    G.imprimir();
 
-            CargarArchivo();
+    CargarArchivo();
+
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
 }
 
 
 void BajaNodo(){
+    time_t inicio, fin;
+    time(&inicio);
     int noEli;
     char resp;
     int nVertices = G.numVertices();
@@ -285,10 +310,16 @@ void BajaNodo(){
         G.eliminarNo(noEli);
 
         G.imprimir();
+
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
 }
 
 
 int EjecutarDijkstra() {
+    time_t inicio, fin;
+    time(&inicio);
     int fuente;
     int nVertices = G.numVertices();
 
@@ -318,10 +349,16 @@ int EjecutarDijkstra() {
             cout << u << ") " << G.getNombre(u) << ": " << dist[u] << "\n";
     }
 
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
+
     return 0;
 }
 
 int EjecutarDFS() {
+    time_t inicio, fin;
+    time(&inicio);
     int opcion;
     cout << "\n[1] DFS desde todos los nodos (grafo completo)\n";
     cout << "[2] DFS desde un nodo especifico\n";
@@ -358,10 +395,16 @@ int EjecutarDFS() {
         return 1;
     }
 
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
+
     return 0;
 }
 
 int EjecutarBFS() {
+    time_t inicio, fin;
+    time(&inicio);
     int opcion;
     cout << "\n[1] BFS desde todos los componentes\n";
     cout << "[2] BFS desde un nodo especifico\n";
@@ -398,10 +441,16 @@ int EjecutarBFS() {
         return 1;
     }
 
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
+
     return 0;
 }
 
 void AltaVeh() {
+    time_t inicio, fin;
+    time(&inicio);
     string id, tipo, placa, origen, destino, hora;
 
     cout << "\n--- Alta de Vehiculo ---\n";
@@ -429,22 +478,32 @@ void AltaVeh() {
 
     cout << "\nVehiculo registrado correctamente.\n";
     CargarArchivo();
+
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
 }
 
 void BajaVeh() {
+    time_t inicio, fin;
+    time(&inicio);
     string id;
     cout << "\n--- Baja de Vehiculo ---\n";
     cout << "ID del vehiculo a eliminar: ";
     cin >> id;
 
-    if (tablaVehiculos.eliminar(id))
-        cout << "Vehiculo eliminado correctamente.\n";
-    else
-        cout << "No se encontro el vehiculo.\n";
+    if (tablaVehiculos.eliminar(id)) cout << "Vehiculo eliminado correctamente.\n";
+    else { cout << "No se encontro el vehiculo.\n"; return; }
+
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
 
 }
 
 void BuscarVeh() {
+    time_t inicio, fin;
+    time(&inicio);
     string id;
     cout << "\n--- Buscar Vehiculo ---\n";
     cout << "Ingresa el ID del vehiculo: ";
@@ -462,7 +521,12 @@ void BuscarVeh() {
         cout << "Hora entrada: " << v->horaEntrada << "\n";
     } else {
         cout << "ID no encontrado\n";
+        return;
     }
+
+    time(&fin);
+    double tiempo = difftime(fin, inicio);
+    cout << "La operacion tomo: " << tiempo << " Segundos \n";
 }
 
 
@@ -470,7 +534,9 @@ void BuscarVeh() {
 
 
 int main(){
+    time_t inicio, fin;
     int selec;
+    double tiempo;
 
     do{
         cout << "\n--------------------------------------------------------------------------------------------------";
@@ -516,10 +582,24 @@ int main(){
             case 6: BajaArista();
             break;
 
-            case 7: G.imprimirlistaAdyacencia();
+            case 7: 
+            time(&inicio);
+
+            G.imprimirlistaAdyacencia();
+            
+            time(&fin);
+            tiempo = difftime(fin, inicio);
+            cout << "La operacion tomo: " << tiempo << " Segundos \n";
             break;
 
-            case 8: G.imprimir();
+            case 8: 
+            time(&inicio);
+
+            G.imprimir();
+            
+            time(&fin);
+            tiempo = difftime(fin, inicio);
+            cout << "La operacion tomo: " << tiempo << " Segundos \n";
             break;
 
             case 9: EjecutarDijkstra();
