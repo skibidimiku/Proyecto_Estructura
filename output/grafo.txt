@@ -1,3 +1,7 @@
 N;0;Uaa
 N;1;Altaria
 N;2;El_bar_de_gus
+E;0;0;1
+E;0;2;11
+E;1;0;8
+E;2;1;3

@@ -158,6 +158,13 @@ void AltaArista(){
     int band = 1;
     
     while(band==1){
+        for (size_t i = 0; i < G.numVertices(); i++){
+            cout << i <<") " << G.getNombre(i) << "\t";
+            Sleep(500);
+            if(i % 3 == 0 && i != 0) cout << endl;
+        }
+        cout << endl;
+
         cout << "Dame el punto de donde empezara la arista: ";
             cin >> a;
         cout << "Dame el punto al que llegara: ";
@@ -191,6 +198,13 @@ void BajaArista(){
     int band = 1;
     
     while(band==1){
+        for (size_t i = 0; i < G.numVertices(); i++){
+            cout << i <<") " << G.getNombre(i) << "\t";
+            Sleep(500);
+            if(i % 3 == 0 && i != 0) cout << endl;
+        }
+        cout << endl;
+
         cout << "Dame el punto de donde empieza la arista:";
             cin >> a;
         cout << "Dame el punto al que llega:";
@@ -242,6 +256,13 @@ void BajaNodo(){
     int nVertices = G.numVertices();
     G.imprimir();
         cout << "\n";
+        for (size_t i = 0; i < G.numVertices(); i++){
+            cout << i <<") " << G.getNombre(i) << "\t";
+            Sleep(500);
+            if(i % 3 == 0 && i != 0) cout << endl;
+        }
+        cout << endl;
+        
         cout << "Cual nodo deseas dar de baja:";
         cin >> noEli;
 
@@ -270,6 +291,14 @@ void BajaNodo(){
 int EjecutarDijkstra() {
     int fuente;
     int nVertices = G.numVertices();
+
+    for (size_t i = 0; i < G.numVertices(); i++){
+        cout << i <<") " << G.getNombre(i) << "\t";
+        Sleep(500);
+        if(i % 3 == 0 && i != 0) cout << endl;
+     }
+    cout << endl;
+
     cout << "Ingresa el nodo fuente para Dijkstra: ";
     cin >> fuente;
     
@@ -281,12 +310,12 @@ int EjecutarDijkstra() {
     vector<int> dist, parent;
     G.dijkstra(fuente, dist, parent);
 
-    cout << "\nDistancias minimas desde " << fuente << ":\n";
+    cout << "\nDistancias minimas desde " << fuente << ") " << G.getNombre(fuente) << ":\n";
     for(size_t u = 0; u < G.numVertices(); ++u) {
         if(dist[u] == 1e9)
-            cout << u << ": Inf\n";
+            cout << u << ") " << G.getNombre(u) << ": Inf\n";
         else  
-            cout << u << ": " << dist[u] << "\n";
+            cout << u << ") " << G.getNombre(u) << ": " << dist[u] << "\n";
     }
 
     return 0;
@@ -306,6 +335,14 @@ int EjecutarDFS() {
         dfs.imprimirResultados();
     } else if(opcion == 2) {
         int nodo;
+
+        for (size_t i = 0; i < G.numVertices(); i++){
+            cout << i <<") " << G.getNombre(i) << "\t";
+            Sleep(500);
+            if(i % 3 == 0 && i != 0) cout << endl;
+        }
+        cout << endl;
+
         cout << "Ingresa el nodo de inicio: ";
         cin >> nodo;
         
@@ -338,6 +375,14 @@ int EjecutarBFS() {
         bfs.imprimirResultados();
     } else if(opcion == 2) {
         int nodo;
+
+        for (size_t i = 0; i < G.numVertices(); i++){
+            cout << i <<") " << G.getNombre(i) << "\t";
+            Sleep(500);
+            if(i % 3 == 0 && i != 0) cout << endl;
+        }
+        cout << endl;
+
         cout << "Ingresa el nodo de inicio: ";
         cin >> nodo;
 
