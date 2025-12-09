@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string.h>
 #include <fstream>
+#include <windows.h>
 #include "Grafo.h"
 
 #include "Vehiculos.h"
@@ -10,13 +11,52 @@ using namespace std;
 
 
 //recipiente universal para un grafo de tamaño "4"
-int N=3;
-GrafoMatriz G(N, true);
-VehiculoClase tablaVehiculos(101);
+
+GrafoMatriz G(0, true, "");
+VehiculoClase tablaVehiculos(10);
+
+void leerArchivoVehi(){
+        ifstream archivo("Vehiculo.txt");
+        if (!archivo.is_open()) {
+            cout << "no se pudo abrir Vehiculo.txt\n";
+            return;
+        }
+
+        string linea;
+
+         while (getline(archivo, linea)){
+            if (linea == "" || linea[0] == '#')continue;
+
+            stringstream ss(linea);
+
+            string tipo;
+            getline(ss, tipo, ';');
+
+            char t = tipo[0];
+            if(t == 'V'){
+                string id, tip, pla, org, des, hor;
+                getline(ss, id, ';');
+                getline(ss, tip, ';');
+                getline(ss, pla, ';');
+                getline(ss, org, ';');
+                getline(ss, des, ';');
+                getline(ss, hor, ';');
+                cout << "V: " << "(" << id << ", " << tip << ", " << pla << ", "
+                         << org << ", " << des << ", " << hor << ") \n";
+
+                Vehiculo v(id, tip, pla, org, des, hor);
+                tablaVehiculos.insertarVehiculo(v);
+                Sleep(1000);
+                    
+            }
+        }
+        archivo.close();
+}
 
 void leerArchivo() {
+    int c=1;
 
-    ifstream archivo("C:\\Users\\VicPa\\OneDrive\\Desktop\\Projecto final DATOS 2\\grafo.txt");
+    ifstream archivo("grafo.txt");
     if (!archivo.is_open()) {
         cout << "no se pudo abrir grafo.txt\n";
         return;
@@ -47,9 +87,10 @@ void leerArchivo() {
             getline(ss, id, ';');
             getline(ss, nombre, ';');
             cout << "[nodo] id=" << id << " nombre=" << nombre << "\n";
-        }
-
-        else if (t == 'E') {
+            G.redimensionar(c);
+            G.setNombre(c-1, nombre);
+            c++; Sleep(1000);
+        }else if (t == 'E') {
             string a, b, peso;
             getline(ss, a, ';');
             getline(ss, b, ';');
@@ -68,7 +109,7 @@ void leerArchivo() {
                 
 
             cout << "[arista] " << a << " -> " << b << " peso=" << peso << "\n";
-
+            Sleep(1000);
         }
         
     }//FIN CICLO IF
@@ -76,24 +117,23 @@ void leerArchivo() {
     cout << "\n";
     G.imprimir();
     archivo.close();
+    cout << "\n";
+
+    leerArchivoVehi();
 
 } //FIN DE LEER ARCHIVOS 
 
-
-
-
-int CargarArchivo(){
-
-    ofstream archivo("C:\\Users\\VicPa\\OneDrive\\Desktop\\Projecto final DATOS 2\\grafo.txt");
+void CargarArchivo(){
+    ofstream archivo("grafo.txt");
     if (!archivo.is_open()) {
         cout << "no se pudo abrir grafo.txt\n";
-        return 1;
+        return;
     }
 
 
     //guardar Nodos Y recorre vector
     for(size_t i=0; i< G.numVertices(); i++){
-        archivo << "N;" << i << ";nodo_" << i << "\n";
+        archivo << "N;" << i << ";" << G.getNombre(i) << "\n";
     }
 
     //guardar aristas, 2 for por recorrer matriz se mete en un VECTOR desde otro VECTOR
@@ -104,28 +144,30 @@ int CargarArchivo(){
             }
         }
     }
+
     archivo.close();
+    tablaVehiculos.guardarArchiv();
 }
 
 
 
 
-int AltaArista(){
-    
+void AltaArista(){
+    int nVertices = G.numVertices();
     int a,b,p;
     int band = 1;
     
     while(band==1){
-        cout << "Dame el punto de donde empezara la arista.";
+        cout << "Dame el punto de donde empezara la arista: ";
             cin >> a;
-        cout << "Dame el punto al que llegara.";
+        cout << "Dame el punto al que llegara: ";
             cin >> b;
-        cout << "Dame el peso.";
+        cout << "Dame el peso: ";
             cin >> p;
             
             //validacion  <--- van a ver mas de estas
             //checka que no borren mas de lo que hay, borre todo o borre "0" nodos para joder el programa
-            if (a >= G.numVertices() || b >= G.numVertices()) {
+            if (a >= nVertices || b >= nVertices) {
             cout << "Arista no existe / nodo no existente ERROR.\n";
             continue;
         }
@@ -143,19 +185,19 @@ int AltaArista(){
 
 
 
-int BajaArista(){
-    
+void BajaArista(){
+    int nVertices = G.numVertices();
     int a,b;
     int band = 1;
     
     while(band==1){
-        cout << "Dame el punto de donde empieza la arista.";
+        cout << "Dame el punto de donde empieza la arista:";
             cin >> a;
-        cout << "Dame el punto al que llega.";
+        cout << "Dame el punto al que llega:";
             cin >> b;
 
             //validacion
-            if (a >= G.numVertices() || b >= G.numVertices()) {
+            if (a >= nVertices || b >= nVertices) {
             cout << "Error, nodo no existe.\n";
             continue;
         }
@@ -173,16 +215,20 @@ int BajaArista(){
 
 
 
-int AltaNodo(){
-    int NSUMA;
+void AltaNodo(){
+    string nom;
     G.imprimir();
         cout << "\n";
-        cout << "Cuantos nodos Deseas crear?";
-            cin >> NSUMA;
+        cout << "Dame el nombre del nodo: ";
+        cin>>nom;
             
             
-            size_t nuevoTamano = G.numVertices() + NSUMA;
+            
+            size_t nuevoTamano = G.numVertices() + 1;
             G.redimensionar(nuevoTamano);
+            cout<<G.numVertices();
+            G.setNombre(G.numVertices()-1, nom);
+
 
             G.imprimir();
 
@@ -190,17 +236,18 @@ int AltaNodo(){
 }
 
 
-int BajaNodo(){
+void BajaNodo(){
     int NRESTA;
+    int nVertices = G.numVertices();
     G.imprimir();
         cout << "\n";
-        cout << "Cuantos nodos Deseas dar de baja?";
+        cout << "Cuantos nodos Deseas dar de baja:";
             cin >> NRESTA;
             
         //validacion    
-        if (NRESTA <= 0 || NRESTA >= G.numVertices()) {
+        if (NRESTA <= 0 || NRESTA >= nVertices) {
         cout << "Error.\n";
-        return 1;
+        return;
         }
 
             size_t nuevoTamano = G.numVertices() - NRESTA;
@@ -214,10 +261,11 @@ int BajaNodo(){
 
 int EjecutarDijkstra() {
     int fuente;
+    int nVertices = G.numVertices();
     cout << "Ingresa el nodo fuente para Dijkstra: ";
     cin >> fuente;
     
-    if(fuente >= G.numVertices()) {
+    if(fuente >= nVertices) {
         cout << "Error: nodo fuente no existe.\n";
         return 1;
     }
@@ -327,11 +375,12 @@ void AltaVeh() {
     tablaVehiculos.insertarVehiculo(v);
 
     cout << "\nVehiculo registrado correctamente.\n";
+    CargarArchivo();
 }
 
 void BajaVeh() {
     string id;
-    cout << "\n--- Baja de VehIculo ---\n";
+    cout << "\n--- Baja de Vehiculo ---\n";
     cout << "ID del vehiculo a eliminar: ";
     cin >> id;
 
@@ -339,6 +388,7 @@ void BajaVeh() {
         cout << "Vehiculo eliminado correctamente.\n";
     else
         cout << "No se encontro el vehiculo.\n";
+
 }
 
 void BuscarVeh() {
@@ -370,24 +420,29 @@ int main(){
     int selec;
 
     do{
-        cout << "\n---------------------------------------------------------";
-        cout << "\n\t\t\t ---> MENU <---";
-        cout << "\n\t [1] Cargar red.";
-        cout << "\n\t [2] Cargar nueva red a archivo.";
-        cout << "\n\t [3] AltaArista.";
-        cout << "\n\t [4] BajaArista.";
-        cout << "\n\t [5] AltaNodo.";
-        cout << "\n\t [6] BajaNodo.";
-        cout << "\n\t [7] Dijkstra.";
-        cout << "\n\t [8] DFS (Depth First Search).";
-        cout << "\n\t [9] BFS (Breadth First Search).";
-        cout << "\n\t [10] Alta Vehiculo.";
-		cout << "\n\t [11] Baja Vehiculo.";
-		cout << "\n\t [12] Buscar Vehiculo.";
-		cout << "\n\t [13] InfoHash.";
-        cout << "\n\t [0] Salir";
+        cout << "\n--------------------------------------------------------------------------------------------------";
+        cout << "\n\t\t\t ---> MENU <---"; Sleep(500);
+        cout << "\n> [1] CargarRed."; 
+        cout << "\t [2] GuardarRed.";
+        cout << "\t [3] AltaNodo.";
+        cout << "\t [4] AltaArista."; Sleep(500);
+        cout << "\n> [5] BajaNodo.";
+        cout << "\t\t [6] BajaArista.";
+        cout << "\t [7] MostrarListaAdj.";
+        cout << "\t [8] MostrarMatriz."; Sleep(500);
+        cout << "\n> [9] Dijkstra.";
+        cout << "\t\t [10] DFS.";
+        cout << "\t\t [11] BFS."; Sleep(500);
+        cout << "\n> [12] Alta Vehiculo.";
+		cout << "\t [13] Baja Vehiculo.";
+		cout << "\t [14] Buscar Vehiculo."; Sleep(500);
+		cout << "\n> [15] InfoHash.";
+        cout << "\t [0] Salir"; Sleep(500);
         cout << "\n\n\t Elige una opcion: ";
         cin >> selec;
+        cout << endl;
+
+        Sleep(100);
 
         switch(selec){
             case 1: leerArchivo();
@@ -396,37 +451,43 @@ int main(){
             case 2: CargarArchivo();
             break;
 
-            case 3: AltaArista();
+            case 3: AltaNodo();
             break;
 
-            case 4: BajaArista();
+            case 4: AltaArista();
             break;
 
-            case 5: AltaNodo();
+            case 5: BajaNodo();
             break;
 
-            case 6: BajaNodo();
+            case 6: BajaArista();
             break;
 
-            case 7: EjecutarDijkstra();
+            case 7: G.imprimirlistaAdyacencia();
             break;
 
-            case 8: EjecutarDFS();
+            case 8: G.imprimir();
             break;
 
-            case 9: EjecutarBFS();
+            case 9: EjecutarDijkstra();
+            break;
+
+            case 10: EjecutarDFS();
+            break;
+
+            case 11: EjecutarBFS();
             break;
             
-            case 10: AltaVeh(); 
+            case 12: AltaVeh(); 
 			break;
 			
-			case 11: BajaVeh(); 
+			case 13: BajaVeh(); 
 			break;
 			
-			case 12: BuscarVeh(); 
+			case 14: BuscarVeh(); 
 			break;
 			
-			case 13: tablaVehiculos.infoHash();
+			case 15: tablaVehiculos.infoHash();
     		break;
 
             case 0: cout << "\n\t Saliendo del programa...\n";

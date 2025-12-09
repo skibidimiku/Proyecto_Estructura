@@ -10,11 +10,14 @@ class GrafoMatriz{
     vector<vector<bool>> A;
     //matriz de pesos
     vector<vector<int>> pesos;
+
+    vector<string> nombre;
     bool esDirigido;
 public:
-    GrafoMatriz(size_t n, bool dirigido = true)
+    GrafoMatriz(size_t n, bool dirigido = true, string nom="")
         : A(n,vector<bool>(n,false)),
-        pesos(n,vector<int>(n,0)),
+        pesos(n,vector<int>(n,0)), 
+        nombre(n, nom),
         esDirigido(dirigido){}
 
     size_t numVertices() const {return A.size();}
@@ -64,6 +67,39 @@ public:
         }
     }
 
+    void imprimirlistaAdyacencia() const {
+        bool band=false;
+        cout << "Lista de adyacencia\n";
+        for (size_t i = 0; i < numVertices(); i++){
+            for (size_t j = 0; j < numVertices(); j++){
+                if(A[i][j]==true){
+                    if(band==false){
+                        cout << "(" << nombre[i] << "): [ " << nombre[j];
+                        band=true;
+                    }else if(band==true){
+                        cout << ", " << nombre[j];
+                    }
+                }
+            }
+            if(band==false){
+                cout << nombre[i] << " No conecta con nada." << endl;
+            }else{
+                cout << " ]" << endl;
+                band=false;
+            }
+        }
+    }
+
+    void setNombre(size_t v, const string& nom){
+        if(v >= numVertices()){
+            cout<< "No se encontro el nodo" << endl;
+            return;
+        }
+
+        nombre[v]=nom;
+        
+    }
+
 
     int obtenerPeso(size_t u, size_t v) {
     if(u >= numVertices() || v >= numVertices() || !A[u][v]) {
@@ -82,6 +118,7 @@ public:
     vector<vector<bool>> nueva(nuevoN, vector<bool>(nuevoN, false));
     //misma cosa pero con pesos como se maneja con vectores
     vector<vector<int>> nuevaPesos(nuevoN, vector<int>(nuevoN, 0));
+    vector<string> nuevoNom(nuevoN, "");
 
 
     //guarda el tamaño nuevo de matrizes que tiene que copiar
@@ -95,14 +132,16 @@ public:
             nueva[i][j] = A[i][j];
             nuevaPesos[i][j] = pesos[i][j];
         }
+        nuevoNom[i]=nombre[i];
     }
 
     //la matriz vieja es remplazada por la nueva que se acaba de trabajar
     A = nueva;
     pesos = nuevaPesos;
+    nombre = nuevoNom;
         }
 
-
+        string getNombre(int i){ return nombre[i];}
 
         void dijkstra(size_t s,
                 vector<int>& dist,

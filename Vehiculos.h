@@ -90,22 +90,54 @@ class VehiculoClase{
             }
         }*/
 		void infoHash() const {
-        cout << "\n---- INFORMACION DE LA TABLA HASH ----\n";
+            cout << "\n---- INFORMACION DE LA TABLA HASH ----\n";
 
-        cout << "Capacidad (numero de buckets): " << capacidad << "\n";
-        size_t total = totalVehiculo();
-        cout << "Total de vehiculos almacenados: " << total << "\n";
+            cout << "Capacidad (numero de buckets): " << capacidad << "\n";
+            size_t total = totalVehiculo();
+            cout << "Total de vehiculos almacenados: " << total << "\n";
 
-        double loadFactor = (double)total / capacidad;
-        cout << fixed << setprecision(3);
-        cout << "Factor de carga: " << loadFactor << "\n";
+            double loadFactor = (double)total / capacidad;
+            cout << fixed << setprecision(3);
+            cout << "Factor de carga: " << loadFactor << "\n";
 
-        cout << "\nDistribucion (vehiculos por bucket):\n";
-        for (size_t i = 0; i < capacidad; ++i) {
-            cout << "Bucket " << i << ": " << Tabla[i].size() << " vehiculos\n";
+            cout << "\nDistribucion (vehiculos por bucket):\n";
+
+            for (size_t i = 0; i < capacidad; ++i) {
+                cout << "Bucket " << i << ": ";
+                if(Tabla[i].size() > 0){
+                    for(const auto& lb : Tabla[i]){
+                        cout << "(" << lb.IdVehiculo << ", " << lb.Tipo << ", " << lb.Placa << ", "
+                             << lb.Origen << ", " << lb.Destino << ", " << lb.horaEntrada << ") ";
+                    }
+                }
+                cout << "\n";
+            }
+
+            cout << "----------------------------------------\n\n";
         }
 
-        cout << "----------------------------------------\n\n";
-    }
+        void guardarArchiv(){
+                ofstream archivo("Vehiculo.txt");
+                if (!archivo.is_open()) {
+                    cout << "no se pudo abrir Vehiculo.txt\n";
+                    return;
+                }
+
+
+                //guardar Nodos Y recorre vector
+                for(size_t i=0; i< capacidad; i++){
+                    if(Tabla[i].size() > 0){
+                        for (const auto& vehi : Tabla[i]){
+                            archivo << "V;" << vehi.IdVehiculo << ";" << vehi.Tipo << ";" << vehi.Placa << ";" 
+                            << vehi.Origen << ";" << vehi.Destino << ";" << vehi.horaEntrada << "\n";
+                        }
+                        
+                        
+                    }
+                    
+
+                }
+                archivo.close();
+        }   
 
 };
