@@ -1,7 +1,3 @@
 N;0;Uaa
 N;1;Altaria
-N;2;La_casa_de_gus
-N;3;El_bar_de_gus
-E;0;2;3
-E;1;2;11
-E;2;0;3
+N;2;El_bar_de_gus

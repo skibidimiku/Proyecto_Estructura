@@ -108,6 +108,41 @@ public:
     return pesos[u][v];
     }
 
+    void eliminarNo(size_t idNo){
+        if(idNo >= numVertices()) return;
+
+        size_t nuevoN = numVertices() - 1;
+
+        if(nuevoN == 0){
+            A.clear();
+            pesos.clear();
+            nombre.clear();
+            return;
+        }
+
+        vector<vector<bool>> nueva(nuevoN, vector<bool>(nuevoN, false));
+        vector<vector<int>> nuevaPesos(nuevoN, vector<int>(nuevoN, 0));
+        vector<string> nuevoNom(nuevoN, "");
+
+        size_t iaux=0;
+        for (size_t i = 0; i < numVertices() ; i++){
+            if(i == idNo) continue;
+            size_t jaux=0;
+            for(size_t j = 0; j < numVertices() ; j++){
+                if(j == idNo) continue;
+                nueva[iaux][jaux]= A[i][j];
+                nuevaPesos[iaux][jaux] = pesos[i][j];
+                jaux++;
+            }
+            nuevoNom[iaux] = nombre[i];
+            iaux++; 
+        }
+        
+        A = nueva;
+        pesos = nuevaPesos;
+        nombre = nuevoNom;
+    }
+
 
     //FUNCION PARA CAMBIAR DE TAMAÑO A LOS 2 VECTORES.
     void redimensionar(size_t nuevoN) {

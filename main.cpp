@@ -237,25 +237,33 @@ void AltaNodo(){
 
 
 void BajaNodo(){
-    int NRESTA;
+    int noEli;
+    char resp;
     int nVertices = G.numVertices();
     G.imprimir();
         cout << "\n";
-        cout << "Cuantos nodos Deseas dar de baja:";
-            cin >> NRESTA;
+        cout << "Cual nodo deseas dar de baja:";
+        cin >> noEli;
+
             
         //validacion    
-        if (NRESTA <= 0 || NRESTA >= nVertices) {
-        cout << "Error.\n";
-        return;
+        if (noEli < 0 || noEli >= nVertices) {
+            cout << "Error.\n";
+            return;
         }
 
-            size_t nuevoTamano = G.numVertices() - NRESTA;
-            G.redimensionar(nuevoTamano);
+        cout<<"Estas seguro de dar de baja al nodo "<< G.getNombre(noEli) << " (s/n) \n";
+        cin >>resp;
+        while (resp != 'N' && resp != 'n' && resp != 'S' && resp != 's'){
+            cout<<"La respueta no es valida (s/n) \n";
+            cin >>resp;
+        }
 
-            G.imprimir();
+        if(resp == 'N' || resp == 'n') return;
 
-            CargarArchivo();
+        G.eliminarNo(noEli);
+
+        G.imprimir();
 }
 
 
