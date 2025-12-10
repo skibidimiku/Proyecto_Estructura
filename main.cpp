@@ -5,7 +5,6 @@
 #include <fstream>
 #include <windows.h>
 #include "Grafo.h"
-
 #include "Vehiculos.h"
 
 using namespace std;
@@ -17,9 +16,9 @@ GrafoMatriz G(0, true, "");
 VehiculoClase tablaVehiculos(10);
 
 void leerArchivoVehi(){
-        ifstream archivo("Vehiculo.txt");
+        ifstream archivo("Vehiculo.csv");
         if (!archivo.is_open()) {
-            cout << "no se pudo abrir Vehiculo.txt\n";
+            cout << "no se pudo abrir Vehiculo.csv\n";
             return;
         }
 
@@ -59,9 +58,9 @@ void leerArchivo() {
     time(&inicio);
     int c=1;
 
-    ifstream archivo("grafo.txt");
+    ifstream archivo("grafo.csv");
     if (!archivo.is_open()) {
-        cout << "no se pudo abrir grafo.txt\n";
+        cout << "no se pudo abrir grafo.csv\n";
         return;
     }
 
@@ -130,9 +129,9 @@ void leerArchivo() {
 } //FIN DE LEER ARCHIVOS 
 
 void CargarArchivo(){
-    ofstream archivo("grafo.txt");
+    ofstream archivo("grafo.csv");
     if (!archivo.is_open()) {
-        cout << "no se pudo abrir grafo.txt\n";
+        cout << "no se pudo abrir grafo.csv\n";
         return;
     }
 
@@ -259,7 +258,6 @@ void AltaNodo(){
             
     size_t nuevoTamano = G.numVertices() + 1;
     G.redimensionar(nuevoTamano);
-    cout<<G.numVertices();
     G.setNombre(G.numVertices()-1, nom);
 
 

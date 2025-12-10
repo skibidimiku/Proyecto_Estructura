@@ -117,9 +117,9 @@ class VehiculoClase{
         }
 
         void guardarArchiv(){
-                ofstream archivo("Vehiculo.txt");
+                ofstream archivo("Vehiculo.csv");
                 if (!archivo.is_open()) {
-                    cout << "no se pudo abrir Vehiculo.txt\n";
+                    cout << "no se pudo abrir Vehiculo.csv\n";
                     return;
                 }
 

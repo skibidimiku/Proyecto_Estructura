@@ -9,18 +9,43 @@ class GrafoMatriz{
     //matriz booleana
     vector<vector<bool>> A;
     //matriz de pesos
-    vector<vector<int>> pesos;
+    vector<vector<float>> pesos;
 
     vector<string> nombre;
     bool esDirigido;
 public:
     GrafoMatriz(size_t n, bool dirigido = true, string nom="")
         : A(n,vector<bool>(n,false)),
-        pesos(n,vector<int>(n,0)), 
+        pesos(n,vector<float>(n,0)), 
         nombre(n, nom),
         esDirigido(dirigido){}
 
     size_t numVertices() const {return A.size();}
+    
+    void setNombre(size_t v, const string& nom){
+        if(v >= numVertices()){
+            cout<< "No se encontro el nodo" << endl;
+            return;
+        }
+
+        nombre[v]=nom;
+    }
+
+    int obtenerPeso(size_t u, size_t v) {
+        if(u >= numVertices() || v >= numVertices() || !A[u][v]) {
+            return 0;
+        }
+        return pesos[u][v];
+    }
+
+    string getNombre(int i){ return nombre[i];}
+
+    bool existeArista(size_t u, size_t v){
+        if(u >= numVertices() || v >= numVertices()){
+            return false;
+        }
+        return A[u][v];
+    }
 
     //agregar arista u -> v
     void agregarArista(size_t u, size_t v,int peso = 1){
@@ -46,13 +71,6 @@ public:
             A[v][u] = false;
             pesos[v][u] = 0;
         }
-    }
-
-    bool existeArista(size_t u, size_t v){
-        if(u >= numVertices() || v >= numVertices()){
-            return false;
-        }
-        return A[u][v];
     }
 
     void imprimir() const{
@@ -90,30 +108,46 @@ public:
         }
     }
 
-    void setNombre(size_t v, const string& nom){
-        if(v >= numVertices()){
-            cout<< "No se encontro el nodo" << endl;
-            return;
+
+
+
+    //FUNCION PARA CAMBIAR DE TAMAÑO A LOS 2 VECTORES.
+    void redimensionar(size_t nuevoN) {
+        //formula para crear matriz nueva, con los parametros del tamaño nuevo que queremos
+        //tamaño nuevoN x nuevoN y todo lo pone en "false" osea 0´s, crea una base para la cual trabajar
+        vector<vector<bool>> nueva(nuevoN, vector<bool>(nuevoN, false));
+        //misma cosa pero con pesos como se maneja con vectores
+        vector<vector<float>> nuevaPesos(nuevoN, vector<float>(nuevoN, 0));
+        vector<string> nuevoNom(nuevoN, "");
+
+
+        //guarda el tamaño nuevo de matrizes que tiene que copiar
+        //por ejemplo, si quieres que el tamaño nuevo sea 5, y antes era 3, guarda ese "3"
+        //para saber que copiar
+        size_t minN = min(nuevoN, A.size());
+
+        //recorre y copia los valores antiguos en la matriz
+        for (size_t i = 0; i < minN; i++) {
+            for (size_t j = 0; j < minN; j++) {
+                nueva[i][j] = A[i][j];
+                nuevaPesos[i][j] = pesos[i][j];
+            }
+            nuevoNom[i]=nombre[i];
         }
 
-        nombre[v]=nom;
+        //la matriz vieja es remplazada por la nueva que se acaba de trabajar
+        A = nueva;
+        pesos = nuevaPesos;
+        nombre = nuevoNom;
+    }
+
         
-    }
-
-
-    int obtenerPeso(size_t u, size_t v) {
-    if(u >= numVertices() || v >= numVertices() || !A[u][v]) {
-        return 0;
-    }
-    return pesos[u][v];
-    }
-
-    void eliminarNo(size_t idNo){
+    void eliminarNo(size_t idNo){ //Este metodo es basicamente una copia de redimensionar
         if(idNo >= numVertices()) return;
 
         size_t nuevoN = numVertices() - 1;
 
-        if(nuevoN == 0){
+        if(nuevoN == 0){ //Si queda vacia se limpia todo se ciera este proceso
             A.clear();
             pesos.clear();
             nombre.clear();
@@ -121,13 +155,13 @@ public:
         }
 
         vector<vector<bool>> nueva(nuevoN, vector<bool>(nuevoN, false));
-        vector<vector<int>> nuevaPesos(nuevoN, vector<int>(nuevoN, 0));
+        vector<vector<float>> nuevaPesos(nuevoN, vector<float>(nuevoN, 0));
         vector<string> nuevoNom(nuevoN, "");
 
         size_t iaux=0;
         for (size_t i = 0; i < numVertices() ; i++){
-            if(i == idNo) continue;
-            size_t jaux=0;
+            if(i == idNo) continue; //Al consegir el valor a borrar se salta este ciclo y asi las varibles                       
+            size_t jaux=0;          // auxiliares se queden 1 valor atras y asi sirva para remplazar los otros datos
             for(size_t j = 0; j < numVertices() ; j++){
                 if(j == idNo) continue;
                 nueva[iaux][jaux]= A[i][j];
@@ -142,41 +176,6 @@ public:
         pesos = nuevaPesos;
         nombre = nuevoNom;
     }
-
-
-    //FUNCION PARA CAMBIAR DE TAMAÑO A LOS 2 VECTORES.
-    void redimensionar(size_t nuevoN) {
-
-
-    //formula para crear matriz nueva, con los parametros del tamaño nuevo que queremos
-    //tamaño nuevoN x nuevoN y todo lo pone en "false" osea 0´s, crea una base para la cual trabajar
-    vector<vector<bool>> nueva(nuevoN, vector<bool>(nuevoN, false));
-    //misma cosa pero con pesos como se maneja con vectores
-    vector<vector<int>> nuevaPesos(nuevoN, vector<int>(nuevoN, 0));
-    vector<string> nuevoNom(nuevoN, "");
-
-
-    //guarda el tamaño nuevo de matrizes que tiene que copiar
-    //por ejemplo, si quieres que el tamaño nuevo sea 5, y antes era 3, guarda ese "3"
-    //para saber que copiar
-    size_t minN = min(nuevoN, A.size());
-
-    //recorre y copia los valores antiguos en la matriz
-    for (size_t i = 0; i < minN; i++) {
-        for (size_t j = 0; j < minN; j++) {
-            nueva[i][j] = A[i][j];
-            nuevaPesos[i][j] = pesos[i][j];
-        }
-        nuevoNom[i]=nombre[i];
-    }
-
-    //la matriz vieja es remplazada por la nueva que se acaba de trabajar
-    A = nueva;
-    pesos = nuevaPesos;
-    nombre = nuevoNom;
-        }
-
-        string getNombre(int i){ return nombre[i];}
 
         void dijkstra(size_t s,
                 vector<int>& dist,
