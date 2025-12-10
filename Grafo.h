@@ -92,10 +92,10 @@ public:
             for (size_t j = 0; j < numVertices(); j++){
                 if(A[i][j]==true){
                     if(band==false){
-                        cout << "(" << nombre[i] << "): [ " << nombre[j];
+                        cout << "(" << nombre[i] << "): [ (" << nombre[j] << ", peso: " << pesos[i][j] << ")";
                         band=true;
                     }else if(band==true){
-                        cout << ", " << nombre[j];
+                        cout << ", (" << nombre[j] << ", peso: " << pesos[i][j] << ")";
                     }
                 }
             }
